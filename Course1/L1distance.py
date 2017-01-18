@@ -59,17 +59,17 @@ class_path = os.path.join(cifar_path, "batches.meta.txt")
 if __name__ == '__main__':
 
     # 将读入的二进制文件转换为数字型txt存入txt文件中
-    for i in list(range(1,6)):
-        file_path = os.path.join(cifar_path, "data_batch_" + str(i) + ".bin")
-        outpath = os.path.join(cifar_path, "data_batch_" + str(i) + ".txt")
-        data = readBinFile(file_path)
-        writeFile(outpath, data)
-        data = []
+    # for i in list(range(1,6)):
+    #     file_path = os.path.join(cifar_path, "data_batch_" + str(i) + ".bin")
+    #     outpath = os.path.join(cifar_path, "data_batch_" + str(i) + ".txt")
+    #     data = readBinFile(file_path)
+    #     writeFile(outpath, data)
+    #     data = []
 
     # 读入标签0-9对应的分类名称
     # lables = np.loadtxt(class_path, dtype="bytes").astype('str')
 
-
+    data = []
     #读取txt文件，将其存入data中，data是5*10000*3073
     for i in list(range(1,6)):
         read_path = os.path.join(cifar_path, "data_batch_" + str(i) + ".txt")
