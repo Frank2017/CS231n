@@ -74,6 +74,9 @@ if __name__ == '__main__':
     for i in list(range(1,6)):
         read_path = os.path.join(cifar_path, "data_batch_" + str(i) + ".txt")
         data.append(np.loadtxt(read_path,dtype='bytes', delimiter=' ').astype('int'))
+
+    #把data存储成npy格式，便于load
+    np.save("all_data.npy", data)
     print(len(data))
     print(len(data[0]))
     print(len(data[0][0]))
