@@ -1,5 +1,7 @@
+# _*_ coding:utf-8 _*_
 import numpy as np
 import os
+from scipy import io
 
 
 width = 32
@@ -68,8 +70,8 @@ if __name__ == '__main__':
 
 
     # #读入标签0-9对应的分类名称
-    # lables = np.loadtxt(class_path, dtype="bytes").astype('str')
-
+    # lables = np.loadtxt(class_path, dtype="str").astype('str')
+    # print(lables)
 
     # #将test文件转换为txt格式,10000*3073,其中第一列为标签列
     # file_path = os.path.join(cifar_path, "test_batch.bin")
@@ -78,19 +80,31 @@ if __name__ == '__main__':
     # writeFile(outpath, data)
 
 
-    # 读取测试集txt文件,1*10000*3073
-    data_test = []
-    read_path = os.path.join(cifar_path, "test_batch.txt")
-    data_test.append(np.loadtxt(read_path,dtype='bytes', delimiter=' ').astype('int'))
-    print(len(data_test))
-    print(len(data_test[0]))
-    print(len(data_test[0][0]))
-
+    # # 读取测试集txt文件,1*10000*3073
+    # data_test = []
+    # read_path = os.path.join(cifar_path, "test_batch.txt")
+    # data_test.append(np.loadtxt(read_path,dtype='int', delimiter=' ').astype('int'))
+    # print(len(data_test))
+    # print(len(data_test[0]))
+    # print(len(data_test[0][0]))
+    # print(data_test[0][0][2])
+    # # 将数据转化为mat格式，方便matlab读取
+    #mat_path = os.path.join(cifar_path, "test_data.mat")
+    # io.savemat(mat_path, {'test': data_test})
+    # test_data_mat = io.loadmat(mat_path)
+    # print (len(test_data_mat["test"][0]))
     ## 读取txt文件，将其存入data中，data是5*10000*3073
-    data = []
+    # data = []
     # for i in list(range(1,6)):
     #     read_path = os.path.join(cifar_path, "data_batch_" + str(i) + ".txt")
-    #     data.append(np.loadtxt(read_path,dtype='bytes', delimiter=' ').astype('int'))
+    #     data.append(np.loadtxt(read_path,dtype='int', delimiter=' ').astype('int'))
+    # mat_path = os.path.join(cifar_path, "train_data.mat")
+    # io.savemat(mat_path, {"train":data})
+    # mat_path = os.path.join(cifar_path, "train_data.mat")
+    # data = io.loadmat(mat_path)
+    # print(data['train'][0][0][2])
+
+
     # print(len(data))
     # print(len(data[0]))
     # print(len(data[0][0]))
