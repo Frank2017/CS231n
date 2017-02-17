@@ -1,5 +1,6 @@
 # _*_ coding:utf-8 _*_
 import numpy as np
+from numpy import *
 import os
 from scipy import io
 
@@ -7,6 +8,10 @@ from scipy import io
 width = 32
 height = 32
 channel = 3
+
+data_dir = "/home/frank_ai/Desktop/"
+cifar_path = os.path.join(data_dir, "cifar-10-batches-bin")
+class_path = os.path.join(cifar_path, "batches.meta.txt")
 
 
 def readBinFile(filepath):
@@ -53,9 +58,26 @@ def writeFile(outpath, data):
         fileout.close()
 
 
-data_dir = "/home/frank_ai/Desktop/"
-cifar_path = os.path.join(data_dir, "cifar-10-batches-bin")
-class_path = os.path.join(cifar_path, "batches.meta.txt")
+def L1_Distance(arr1, arr2):
+    """
+    :notice: 传入的图片数据必须是去除标签后的纯照片数据,32*32*3
+    :param arr1:图片数据1  类型均为numpy.narray
+    :param arr2: 图片数据2
+    :return: 返回两个图片的L1距离的绝对值
+    """
+    return np.sum(np.abs(arr1 - arr2),axis=1)
+    pass
+
+
+def L2_Distance(arr1, arr2):
+    """
+    :notice: 传入的图片数据必须是去除标签后的纯照片数据,32*32*3
+    :param arr1:图片数据1 类型均为numpy.narray
+    :param arr2: 图片数据2
+    :return: 返回两个图片的L2距离的绝对值
+    """
+    return np.sqrt(np.sum(np.square(arr1 - arr2), axis= 1))
+    pass
 
 
 if __name__ == '__main__':
@@ -83,28 +105,47 @@ if __name__ == '__main__':
     # # 读取测试集txt文件,1*10000*3073
     # data_test = []
     # read_path = os.path.join(cifar_path, "test_batch.txt")
+    # # data_test = np.loadtxt(read_path, dtype='int', delimiter=' ')
     # data_test.append(np.loadtxt(read_path,dtype='int', delimiter=' ').astype('int'))
+    # data_test = np.array(data_test)
+    # print(type(data_test))
+    # print(shape(data_test))
+    # print(shape(data_test[0][0:,1:]))
+    # print(data_test[0][0:1, 2])
     # print(len(data_test))
     # print(len(data_test[0]))
     # print(len(data_test[0][0]))
     # print(data_test[0][0][2])
-    # # 将数据转化为mat格式，方便matlab读取
-    #mat_path = os.path.join(cifar_path, "test_data.mat")
-    # io.savemat(mat_path, {'test': data_test})
+    # 将数据转化为mat格式，方便matlab读取,通过python读取出的数据类型为numpy.narray
+    # mat_path = os.path.join(cifar_path, "test_data.mat")
+    # io.savemat(mat_path, {'test_data': data_test[0][0:, 1:], 'test_label':data_test[0][0:, 0]})
     # test_data_mat = io.loadmat(mat_path)
-    # print (len(test_data_mat["test"][0]))
+    # print (shape(test_data_mat["test_data"]))
+    # print (shape(test_data_mat["test_label"]))
+
+
     ## 读取txt文件，将其存入data中，data是5*10000*3073
     # data = []
     # for i in list(range(1,6)):
     #     read_path = os.path.join(cifar_path, "data_batch_" + str(i) + ".txt")
     #     data.append(np.loadtxt(read_path,dtype='int', delimiter=' ').astype('int'))
+    # data = np.array(data)
     # mat_path = os.path.join(cifar_path, "train_data.mat")
-    # io.savemat(mat_path, {"train":data})
-    # mat_path = os.path.join(cifar_path, "train_data.mat")
+    # io.savemat(mat_path, {"train_data":reshape(data[:,:,1:],(50000,3072)), "train_label":reshape(data[:,:,0],(50000,1))})
+    # # mat_path = os.path.join(cifar_path, "train_data.mat")
     # data = io.loadmat(mat_path)
-    # print(data['train'][0][0][2])
+    # print(shape(data['train_data']))
+    # print(shape(data['train_label']))
 
 
     # print(len(data))
     # print(len(data[0]))
     # print(len(data[0][0]))
+
+    # arr1 = np.array([1,2,3,4])
+    # arr2 = np.array([[[4,3,2,1],[4,2,1,3]],[[4,5,6,7],[5,6,4,7]],[[2,7,8,9],[8,9,2,7]]])
+    # print(reshape(arr2,(6,4)))
+    # print(type(arr2))
+    # print(arr2[:,0:1,2:3])
+    #
+    # print(type(arr2))
