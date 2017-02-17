@@ -80,6 +80,33 @@ def L2_Distance(arr1, arr2):
     pass
 
 
+def predict_Y(train, test):
+    """
+    :notice: train 和 test均为读取的mat类型数据，内部将data和label分开存储
+    :param train: 训练数据
+    :param test: 测试数据
+    :return: accuracy:float 返回预测结果的准确度
+    :return:Ypridict: array 返回各项测试集中数据的预测值
+    """
+    train_data = train['train_data']
+    train_label = train['train_label']
+    test_data = test['test_data']
+    test_label= test['test_label']
+    test_num = test_data.shape[0]
+    Ypredict = []
+    for i in list(range(0,test_num)):
+        distance = L1_Distance(test_data[i,:], train_data)
+        # distance = L2_Distance(test_data[i, :], train_data)
+        min_index = np.argmin(distance)
+        Ypredict.append(train_label[min_index])
+    accuracy = 0.0
+    correct_pred = 0
+    for j in list(range(0, test_num)):
+        if Ypredict[i] == test_label[i]:
+            correct_pred += 1
+    accuracy = correct_pred / test_num * 100
+    return (Ypredict, accuracy)
+    pass
 if __name__ == '__main__':
 
     # #将读入的二进制文件转换为数字型txt存入txt文件中
@@ -144,8 +171,19 @@ if __name__ == '__main__':
 
     # arr1 = np.array([1,2,3,4])
     # arr2 = np.array([[[4,3,2,1],[4,2,1,3]],[[4,5,6,7],[5,6,4,7]],[[2,7,8,9],[8,9,2,7]]])
-    # print(reshape(arr2,(6,4)))
+    # print(arr2.shape[0])
     # print(type(arr2))
     # print(arr2[:,0:1,2:3])
     #
     # print(type(arr2))
+
+    train = io.loadmat(os.path.join(cifar_path,"train_data.mat"))
+    test = io.loadmat(os.path.join(cifar_path, "test_data.mat"))
+    print (shape(train['train_data']))
+    print (shape(train['train_label']))
+    print (shape(test['test_data']))
+    print (shape(test['test_label']))
+    (pred, accuracy) = predict_Y(train, test)
+    print (shape(pred))
+    print (accuracy)
+
