@@ -8,8 +8,13 @@ from scipy import io
 width = 32
 height = 32
 channel = 3
+# Linux Path
+# data_dir = "/home/frank_ai/Desktop/"
+# cifar_path = os.path.join(data_dir, "cifar-10-batches-bin")
+# class_path = os.path.join(cifar_path, "batches.meta.txt")
 
-data_dir = "/home/frank_ai/Desktop/"
+# Windows Path
+data_dir = "D:\PYProjects"
 cifar_path = os.path.join(data_dir, "cifar-10-batches-bin")
 class_path = os.path.join(cifar_path, "batches.meta.txt")
 
@@ -183,7 +188,7 @@ if __name__ == '__main__':
     print (shape(train['train_label']))
     print (shape(test['test_data']))
     print (shape(test['test_label']))
-    (pred, accuracy) = predict_Y(train, test)
-    print (shape(pred))
-    print (accuracy)
+    # (pred, accuracy) = predict_Y(train, test)
+    # print (shape(pred))
+    # print (accuracy)
 
