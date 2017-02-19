@@ -1,6 +1,6 @@
 # _*_ coding:utf-8 _*_
 import numpy as np
-import math
+import time
 
 def L_i(x,y,W):
     """
@@ -51,7 +51,6 @@ def L(X, y, W):
     """
     delta = 1.0
     scores = W.T.dot(X) #10*50000
-    print(scores.shape)
     D = X.shape[1] #测试集数据量
     K = W.shape[1] #分类的数目
     scores_correct = np.reshape(scores[(y.T, list(range(D)))],(1,D))  #1*50000
@@ -61,12 +60,27 @@ def L(X, y, W):
     return np.sum(margins)
     pass
 
+# st = time.time()
+# W = np.random.random(10*3073).reshape(3073,10)
+# y = (np.random.random(50000) * 10).astype(int)
+# y = np.reshape(y,(50000,1))
+# X = (np.random.random(50000*3073) * 255).reshape((3073, 50000))
+# en = time.time()
+# print("finish  ->", en - st)
+# st = time.time()
+# print(L(X,y,W))
+# en = time.time()
+# print(en - st)
 
-W = np.array(range(1, 101))
-W = np.reshape(W,(20, 5))
-y = (np.random.random(20) * 5).astype(int)
-y = np.reshape(y,(20,1))
-X = np.array(range(100, 500)).reshape((20, 20))
-print(X)
-print(L(X,y,W))
+f = np.array([1, -2, 0])
+p = np.exp(f) / np.sum(np.exp(f))  #softmax
 
+print(p)
+print(np.sum(p))
+
+# W = np.array([[0.001,-0.05,0.1,0.05,0.0],[0.7,0.2,0.05,0.16,0.2],[0.0,-0.45,-0.2,0.03,-0.3]]).T.reshape(5,3) #5*3
+# X = np.array([-15,22,-44,56,1]).T.reshape(5,1) # 5*1
+# st = time.time()
+# y = np.array([2]) # 1*1
+# en = time.time()
+# print(L(X,y,W), "-->", en - st)
