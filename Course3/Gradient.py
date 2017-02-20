@@ -3,6 +3,7 @@ import numpy as np
 from scipy import io
 import os
 import time
+import math
 
 
 CIFAR10_PATH = r"D:\PYProjects\cifar-10-batches-bin"
@@ -76,26 +77,91 @@ def eval_numerical_gradient(f, x):
     pass
 
 
+def F(x, y, z, step_size):
+    q = x + y
+    dfdq = z
+    dfdz = q
+    dqdx = 1
+    dqdy = 1
+    dfdx = dfdq * dqdx
+    dfdy = dfdq * dqdy
+    x += dfdx * step_size
+    y += dfdy * step_size
+    z += dfdz * step_size
+    return x, y, z, (x+y)*z
+
 if __name__ == "__main__":
-    W = np.random.rand(DATA_DIMENSION+1, CLASS_NUM)*0.001
-    st = time.time()
-    df = eval_numerical_gradient(CIFAR10_loss_function, W)
-    en = time.time()
-    print("Running time is %f", en - st)
-    print("df shape is", df.shape)
-
-    loss_original = CIFAR10_loss_function(W)
-    print("Original loss is %f", loss_original)
-    for step in [-10, -9, -8, -7, -6, -5, -4, -3]:
-        step_size = 10 ** step
-        W_new = W - df * step_size
-        loss_new = CIFAR10_loss_function(W_new)
-        print("For step size is %f , loss is %f", step_size, loss_new)
-
-
-    #test
-    # a = np.array([[1,2],[4,5],[7,8]])
-    # print(a)
-    # b = np.array([3,6]).reshape(1,2)
-    # print(b.shape)
-    # print(np.append(a,b,axis=0))
+    # W = np.random.rand(DATA_DIMENSION+1, CLASS_NUM)*0.001
+    # st = time.time()
+    # df = eval_numerical_gradient(CIFAR10_loss_function, W)
+    # en = time.time()
+    # print("Running time is %f", en - st)
+    # print("df shape is", df.shape)
+    #
+    # loss_original = CIFAR10_loss_function(W)
+    # print("Original loss is %f", loss_original)
+    # for step in [-10, -9, -8, -7, -6, -5, -4, -3]:
+    #     step_size = 10 ** step
+    #     W_new = W - df * step_size
+    #     loss_new = CIFAR10_loss_function(W_new)
+    #     print("For step size is %f , loss is %f", step_size, loss_new)
+    # # test1
+    # f(x,y,z) = (x+y)*z
+    # x = -2
+    # y = 5
+    # z = -4
+    # step_size = 0.01
+    # cnt = 20
+    # while cnt:
+    #     cnt -= 1
+    #     (x, y, z, f) = F(x, y, z, step_size)
+    #     print("%d====> x = %f  y = %f  z = %f  f = %f"%(cnt, x, y, z, f))
+    # # test2
+    # # f(x,y) = (x + sigmod(y)) / (sigmod(x) + (x + y)^2)
+    # x = 3
+    # y = -4
+    # # forword-propagation
+    # sigy = 1.0 / (1 + math.exp(-1 * y))
+    # num = x + sigy
+    # sigx = 1.0 / (1 + math.exp(-1 * x))
+    # xpy = x + y
+    # xpysqr = xpy ** 2
+    # den = sigx + xpysqr
+    # invden = 1.0 / den
+    # f = num * invden
+    # # back-propagation of f=num * invden
+    # dnum = invden
+    # dinvden = num
+    # dden = -1.0 / (den ** 2) * dinvden
+    # dsigx = 1.0 * dden
+    # dxpysqr = 1.0 * dden
+    # dxpy = 2 * xpy * dxpysqr
+    # dx = 1.0 * dxpy
+    # dy = 1.0 * dxpy
+    # # 使用“+=”而不使用“=”的原因：符合多变量链式法则：如果一个变量在链路中存在于多个分支，当对其反向传递求导数时，
+    # # 需要将所有汇入该单元的有关该变量的导数值求和。如果使用“=”则值只会被反复的赋值而不是累加。
+    # # This follows the multi-variable chain rule in Calculus, which states that if a variable branches
+    # # out to different parts of the circuit, then the gradients that flow back to it will add.
+    # dx += ((1 - sigx) * sigx) * dsigx
+    # dx += 1.0 * dnum
+    # dsigy = 1.0 * dnum
+    # dy += ((1 - sigy) * sigy) * dsigy
+    # # test3 f = ((x * y) + max(z, w))*2
+    x = 3.0
+    y = -4.0
+    z = 2.0
+    w = -1.0
+    # forword propagation
+    xmy = x * y
+    mzw = max(z, w)
+    fsum = xmy + mzw
+    f = fsum * 2
+    # backword propagation
+    dfsum = 2
+    dxmy = 1.0 * dfsum
+    dmzw = 1.0 * dfsum
+    dz = dmzw * (1.0 if z >= w else 0.0)
+    dw = dmzw * (1.0 if w >= z else 0.0)
+    dx = y * dxmy
+    dy = x * dxmy
+    print(dx, dy, dz, dw)
