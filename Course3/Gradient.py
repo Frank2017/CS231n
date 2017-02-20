@@ -10,14 +10,16 @@ CIFAR10_CLASS = os.path.join(CIFAR10_PATH, "batches.meta.txt")
 CIFAR10_TRAIN = os.path.join(CIFAR10_PATH, "train_data.mat")
 CIFAR10_TEST = os.path.join(CIFAR10_PATH, "test_data.mat")
 data = io.loadmat(CIFAR10_TRAIN)
-X_train = data['train_data'].T # 3072*50000
-Y_train = data['train_label'] #50000*1
+X_train = data['train_data'].T  # 3072*50000
+Y_train = data['train_label']  # 50000*1
 bias_trick = np.ones((1,X_train.shape[1]))
-X_train = np.append(X_train, bias_trick, axis=0) # 3073*50000
+X_train = np.append(X_train, bias_trick, axis=0)  # 3073*50000
 CLASS_NUM = 10
 TRAIN_DATA_NUM = 50000
 TEST_DATA_NUM = 10000
 DATA_DIMENSION = 3072
+
+
 def L(X, y, W):
     """
     向量化的计算数据的L值
@@ -27,12 +29,12 @@ def L(X, y, W):
     :return: 当前第i个损失函数得到的值
     """
     delta = 1.0
-    scores = W.T.dot(X) #10*50000
-    D = X.shape[1] #测试集数据量
-    K = W.shape[1] #分类的数目
-    scores_correct = np.reshape(scores[(y.T, list(range(D)))],(1,D))  #1*50000
-    wyx = np.ones((K,1)).dot(scores_correct)  # 10*50000
-    margins = np.maximum(0,scores - wyx + delta)
+    scores = W.T.dot(X)  # 10*50000
+    D = X.shape[1]  # 测试集数据量
+    K = W.shape[1]  # 分类的数目
+    scores_correct = np.reshape(scores[(y.T, list(range(D)))], (1, D))  # 1*50000
+    wyx = np.ones((K, 1)).dot(scores_correct)  # 10*50000
+    margins = np.maximum(0, scores - wyx + delta)
     margins[(y.T, list(range(D)))] = 0.0
     loss = np.sum(margins) / D + np.sum(np.square(W))
     return loss
@@ -44,9 +46,10 @@ def CIFAR10_loss_function(W):
     :param W: 权重矩阵  3073*10
     :return: loss 对应W的损失函数值
     """
-    return L(X_train,Y_train, W)
+    return L(X_train, Y_train, W)
     # print(X_train.shape)
     # print(np.sum(X_train[3072]))
+
 
 def eval_numerical_gradient(f, x):
     """
@@ -55,7 +58,6 @@ def eval_numerical_gradient(f, x):
     :return:x的梯度
     """
     h = 0.00001
-    fx = f(x)
     grad = np.zeros(x.shape)
 
     it = np.nditer(x, flags=["multi_index"], op_flags=["readwrite"])
@@ -69,6 +71,7 @@ def eval_numerical_gradient(f, x):
         x[ix] = old_value
         grad[ix] = (fpxh - fdxh) / (2*h)  # [f(x+h) - f(x-h)] / 2h
         it.iternext()
+        print("Iteration index is ", ix, "Gradient is ", grad[ix])
     return grad
     pass
 
