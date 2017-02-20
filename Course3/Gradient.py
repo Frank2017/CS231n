@@ -2,6 +2,7 @@
 import numpy as np
 from scipy import io
 import os
+import time
 
 
 CIFAR10_PATH = r"D:\PYProjects\cifar-10-batches-bin"
@@ -73,9 +74,23 @@ def eval_numerical_gradient(f, x):
 
 
 if __name__ == "__main__":
-    W = np.random.rand(DATA_DIMENSION+1,CLASS_NUM)*0.001
+    W = np.random.rand(DATA_DIMENSION+1, CLASS_NUM)*0.001
+    st = time.time()
     df = eval_numerical_gradient(CIFAR10_loss_function, W)
-    print(df.shape)
+    en = time.time()
+    print("Running time is %f", en - st)
+    print("df shape is", df.shape)
+
+    loss_original = CIFAR10_loss_function(W)
+    print("Original loss is %f", loss_original)
+    for step in [-10, -9, -8, -7, -6, -5, -4, -3]:
+        step_size = 10 ** step
+        W_new = W - df * step_size
+        loss_new = CIFAR10_loss_function(W_new)
+        print("For step size is %f , loss is %f", step_size, loss_new)
+
+
+    #test
     # a = np.array([[1,2],[4,5],[7,8]])
     # print(a)
     # b = np.array([3,6]).reshape(1,2)
